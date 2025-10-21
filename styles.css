@@ -40,7 +40,7 @@ body{
 .cta-row .btn + .btn{margin-left:12px}
 
 .profile-card{background:#fff;padding:18px;border-radius:16px;display:flex;gap:12px;align-items:center;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
-.profile-img{width:90px;height:90px;object-fit:cover;border-radius:12px;flex-shrink:0}
+.profile-img{width:500px;height:500px;object-fit:cover;border-radius:12px;flex-shrink:0}
 .profile-blurb h3{margin:0;font-size:20px}
 .profile-blurb p{margin:2px 0 0;color:var(--muted)}
 
