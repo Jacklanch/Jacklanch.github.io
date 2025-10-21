@@ -1,13 +1,96 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en">
 <head>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Your Name — Portfolio</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<meta name="description" content="Personal website for Your Name — developer, designer, creator">
 </head>
 <body>
-<h1>Jack's Homepage</h1>
-<p>I have 0 qualifications. However, I will give you a brilliant "hello world"</p>
-<p><strong>My favourite repo is:</strong></p>
-<p>this one</p>
+<header class="site-header">
+<div class="container header-inner">
+<a class="logo" href="#">Your<span>Brand</span></a>
+<nav class="nav" id="nav">
+<a href="#about">About</a>
+<a href="#work">Work</a>
+<a href="#contact">Contact</a>
+</nav>
+<button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+</div>
+</header>
 
-<a href="https://www.linkedin.com/in/jack-lanchester-2a2377250">My awesome linkedin</a>
 
-</body>
+<main>
+<section class="hero">
+<div class="container hero-grid">
+<div class="hero-text">
+<h1>Hi — I’m <span class="accent">Your Name</span>.</h1>
+<p class="lede">I build delightful web experiences and tools that make life easier. I’m a developer, designer, and lifelong tinkerer.</p>
+
+
+<p class="quick-blurbs">
+<strong>What I do:</strong>
+<span class="chip">Full‑stack dev</span>
+<span class="chip">Product design</span>
+<span class="chip">Open source</span>
+</p>
+
+
+<p class="cta-row">
+<a class="btn primary" href="#work">See my work</a>
+<a class="btn ghost" href="#contact">Get in touch</a>
+</p>
+</div>
+
+
+<div class="hero-media">
+<div class="profile-card">
+<img src="assets/profile.jpg" alt="Your Name" class="profile-img">
+<div class="profile-blurb">
+<h3>Your Name</h3>
+<p>Developer • Designer • Maker</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+
+<section id="about" class="section about">
+<div class="container">
+<h2>About</h2>
+<p class="about-intro">I’m a software engineer with a background in building user‑centred apps. I love turning messy problems into simple, elegant solutions. Below are some short notes about what I value and how I work.</p>
+
+
+<div class="blurb-grid">
+<article class="blurb">
+<h3>People‑first</h3>
+<p>I focus on usability and accessibility so my work reaches real people and scales well.</p>
+</article>
+
+
+<article class="blurb">
+<h3>Code quality</h3>
+<p>I write readable, tested code. I enjoy refactoring and incremental improvements.</p>
+</article>
+
+
+<article class="blurb">
+<h3>Open source</h3>
+<p>I maintain small libraries and contribute to projects that I use every day.</p>
+</article>
+</div>
+</div>
+</section>
+
+
+<section id="work" class="section work">
+<div class="container">
+<h2>Selected work</h2>
+<p class="muted">A small selection of projects and experiments.</p>
+
+
+</html>
