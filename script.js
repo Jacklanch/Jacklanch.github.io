@@ -1,8 +1,4 @@
-// ===== Obfuscated email =====
-// Encode your email as base64 so it doesn't appear in plain text in the HTML.
-// To set your email, run in the browser console: btoa('your@email.com')
-// and paste the result below.
-const _e = 'eW91ckBlbWFpbC5jb20=';  // base64 of 'your@email.com' — replace this
+const _e = 'amFja2xhbmNoZXN0ZXIyN0BnbWFpbC5jb20=';
 const emailCard = document.getElementById('emailCard');
 const emailValue = document.getElementById('emailValue');
 
