@@ -1,73 +1,413 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jacklanch</title>
-  <meta name="description" content="Personal portfolio website" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
 
-  <!-- Navigation -->
-  <header class="nav-header">
-    <div class="container nav-inner">
-      <nav class="nav-links" id="navLinks">
-        <a href="#contact">Contact</a>
-      </nav>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jack Lanchester</title>
+  <meta name="description"
+    content="Jack Lanchester. Computer science honours student at UNSW, Python and machine learning developer, surfer. Sydney, Australia.">
+  <meta name="theme-color" content="#07131f">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Jack Lanchester">
+  <meta property="og:description" content="Writes Python, trains models, chases waves. Sydney, Australia.">
+  <meta property="og:image" content="https://jacklanch.github.io/assets/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=DM+Sans:opsz,wght@9..40,300..700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="preload" as="image" type="image/webp"
+    imagesrcset="assets/hero-1440.webp 1440w, assets/hero-2560.webp 2560w" imagesizes="100vw">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <a class="skip" href="#about">Skip to content</a>
+
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="#top" aria-label="Jack Lanchester, back to top">JL<span>.</span></a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="#about">About</a>
+      <a href="#surf">Surf</a>
+      <a href="#work">Work</a>
+      <a href="#contact">Contact</a>
+    </nav>
   </header>
 
-  <main>
+  <main id="top">
 
-    <!-- Hero -->
-    <section class="hero">
-      <canvas id="graphCanvas"></canvas>
-      <div class="hero-title-overlay">
-        <h1 class="hero-name">Jacklanch</h1>
+    <!-- ===== Hero ===== -->
+    <section class="hero" id="hero"
+      style="--hero-lqip: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCAAgADADASEAAhEBAxEB/8QAGQAAAwEBAQAAAAAAAAAAAAAAAgMFBAYB/8QAIxAAAQQBAwUBAQAAAAAAAAAAAQACAwQRBSExEhMUQWFRcf/EABkBAQADAQEAAAAAAAAAAAAAAAIBAwQABf/EABkRAAMBAQEAAAAAAAAAAAAAAAABAhEhMf/aAAwDAQACEQMRAD8AvWIu6w5GMrG2i5w6CzYnkr1YaSMlPp5JpeM5cCf6ghrPikBATVzSDjTKsEpbnrbsmxsZKThmD9Wapzpcq0ZZhfXjLyzrA/FzeqXrb5B2XmNipu3U8JU5XSHLYsh5JtPyg820CMWXLNlLxlnCjX1rUY2jdsg+hWdO118jw2xXLc+2q2btcYcRTGv0XViTLvjghcle1nvzFrmN7XV6G6ItRj1Kek6JviscHHkkqX3hxnhTL50Fe8Hx2i3bKoU7pa7lLSCIzUJS3pyEiay8nPpCjkL8hx9oTMfSOkhiY7BOisuafilM4//Z)">
+      <picture class="hero__media">
+        <source type="image/webp" srcset="assets/hero-1440.webp 1440w, assets/hero-2560.webp 2560w" sizes="100vw">
+        <img src="assets/hero-1440.jpg" srcset="assets/hero-1440.jpg 1440w, assets/hero-2560.jpg 2560w" sizes="100vw"
+          width="2560" height="1707" fetchpriority="high" decoding="async"
+          alt="Jack surfing a clean right-hander in front of a palm-covered island, shot from the water with a fisheye lens">
+      </picture>
+      <div class="hero__shade" aria-hidden="true"></div>
+
+      <div class="hero__content">
+        <p class="eyebrow">Sydney, Australia</p>
+        <h1 class="hero__title">Jack <em>Lanchester</em></h1>
+        <p class="hero__lede">Embracing the waves of tech and our beautiful oceans. A collection of some of my best
+          moments.</p>
+        <div class="hero__cta">
+          <a class="btn btn--solid" href="#work">My work</a>
+          <a class="btn btn--ghost" href="#surf">My waves</a>
+        </div>
+      </div>
+
+      <a class="hero__scroll" href="#about" aria-label="Scroll to about"><span></span></a>
+
+      <div class="hero__wave" aria-hidden="true">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+          <path class="wave--back"
+            d="M0 60 C180 10 540 10 720 60 C900 110 1260 110 1440 60 C1620 10 1980 10 2160 60 C2340 110 2700 110 2880 60 V120 H0 Z" />
+          <path class="wave--front"
+            d="M0 70 C180 30 540 30 720 70 C900 110 1260 110 1440 70 C1620 30 1980 30 2160 70 C2340 110 2700 110 2880 70 V120 H0 Z"
+            transform="translate(-1440 0)" />
+        </svg>
       </div>
     </section>
 
-    <!-- Contact -->
-    <section id="contact" class="section section-alt">
-      <div class="container contact-container">
-        <span class="section-label">Contact</span>
-        <h2 class="section-title">Let's Connect</h2>
-        <div class="contact-links">
-          <a href="#" class="contact-card" id="emailCard">
-            <span class="contact-icon">&#9993;</span>
-            <span class="contact-name">Email</span>
-            <span class="contact-value" id="emailValue">Click to copy</span>
+    <!-- ===== About ===== -->
+    <section class="section about" id="about">
+      <div class="wrap about__grid">
+        <figure class="about__media reveal">
+          <picture>
+            <source type="image/webp" srcset="assets/about-1000.webp">
+            <img src="assets/about-1000.jpg" width="1000" height="1333" loading="lazy" decoding="async"
+              alt="Jack lying on his board in the shorebreak throwing a shaka, palm trees behind">
+          </picture>
+          <figcaption>Telo Islands, Indonesia &middot; 2026</figcaption>
+        </figure>
+
+        <div class="about__text">
+          <p class="eyebrow reveal">About</p>
+          <h2 class="reveal">My <em>journey</em> and adventures</h2>
+          <p class="reveal">I've surfed since I was 7 years old, and it's arguably my biggest project.
+            It can be euphoric, it can be punishing, it can be relaxing, it can be terrifying.
+            It's something I've formed strong bonds over, travelled the world for, dedicated hours to.
+            However, slightly disappointingly, professional surfing is well out of the picture for me.
+            Instead, I dedicate myself to my other lifelong passion, problem-solving.</p>
+          <p class="reveal">When I completed my bachelor of Computer Science at UNSW I specialised
+            in the fields of Machine Learning, Cybersecurity, and Data Management. These topics
+            fascinated me for the interesting problems they can address, and the potential to build great things.
+            I have now started an honours year at UNSW, where I will be completing a thesis on
+            my latest area of interest, Computer Vision.
+          </p>
+          <dl class="facts reveal">
+            <div>
+              <dt>Based</dt>
+              <dd>Sydney, Australia</dd>
+            </div>
+            <div>
+              <dt>Studying</dt>
+              <dd>Honours in Computer Science, UNSW</dd>
+            </div>
+            <div>
+              <dt>Professional interests</dt>
+              <dd>Software Engineering, AI Research</dd>
+            </div>
+            <div>
+              <dt>Also</dt>
+              <dd>Automated Systems, Cybersecurity, Data Analysis, AI Workflows</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Surf ===== -->
+    <section class="section surf" id="surf">
+      <div class="wrap">
+        <div class="section__head">
+          <p class="eyebrow reveal">Surf</p>
+          <h2 class="reveal">The <em>gallery.</em></h2>
+          <p class="section__sub reveal">Click any frame to open.</p>
+        </div>
+
+        <div class="gallery" id="gallery">
+          <a class="gallery__item gallery__item--wide reveal" href="assets/gallery/big1-1800.jpg" data-caption="2026">
+            <picture>
+              <source type="image/webp"
+                srcset="assets/gallery/big1-900.webp 900w, assets/gallery/big1-1800.webp 1800w"
+                sizes="(min-width: 701px) min(66vw, 790px), 100vw">
+              <img src="assets/gallery/big1-900.jpg"
+                srcset="assets/gallery/big1-900.jpg 900w, assets/gallery/big1-1800.jpg 1800w"
+                sizes="(min-width: 701px) min(66vw, 790px), 100vw" width="1800" height="1200" loading="lazy"
+                decoding="async" alt="Snapping off the top in a blue rashie, palm trees along the shore" style="object-position: 50% 15%">
+            </picture>
+            <span class="gallery__cap">2026</span>
           </a>
-          <a href="https://github.com/Jacklanch" class="contact-card">
-            <span class="contact-icon">&#10100;</span>
-            <span class="contact-name">GitHub</span>
-            <span class="contact-value">@Jacklanch</span>
+
+          <a class="gallery__item gallery__item--tall reveal" href="assets/gallery/img4936-1800.jpg" data-caption="2026">
+            <picture>
+              <source type="image/webp"
+                srcset="assets/gallery/img4936-900.webp 900w, assets/gallery/img4936-1800.webp 1800w"
+                sizes="(min-width: 701px) min(70vw, 830px), 100vw">
+              <img src="assets/gallery/img4936-900.jpg"
+                srcset="assets/gallery/img4936-900.jpg 900w, assets/gallery/img4936-1800.jpg 1800w"
+                sizes="(min-width: 701px) min(70vw, 830px), 100vw" width="1800" height="1200" loading="lazy"
+                decoding="async" alt="Big snap under the lip in a blue rashie, jungle behind" style="object-position: 50% 45%">
+            </picture>
+            <span class="gallery__cap">2026</span>
           </a>
-          <a href="www.linkedin.com/in/jack-lanchester/" class="contact-card">
-            <span class="contact-icon">&#10070;</span>
-            <span class="contact-name">LinkedIn</span>
-            <span class="contact-value">Jack Lanchester</span>
+
+          <a class="gallery__item gallery__item--wide reveal" href="assets/gallery/big2-1800.jpg" data-caption="2026">
+            <picture>
+              <source type="image/webp"
+                srcset="assets/gallery/big2-900.webp 900w, assets/gallery/big2-1800.webp 1800w"
+                sizes="(min-width: 701px) min(66vw, 790px), 100vw">
+              <img src="assets/gallery/big2-900.jpg"
+                srcset="assets/gallery/big2-900.jpg 900w, assets/gallery/big2-1800.jpg 1800w"
+                sizes="(min-width: 701px) min(66vw, 790px), 100vw" width="1800" height="1200" loading="lazy"
+                decoding="async" alt="Bottom turn under a heavy lip on a grey morning">
+            </picture>
+            <span class="gallery__cap">2026</span>
           </a>
+
+          <a class="gallery__item gallery__item--wide reveal" href="assets/gallery/big3-1800.jpg" data-caption="2026">
+            <picture>
+              <source type="image/webp"
+                srcset="assets/gallery/big3-900.webp 900w, assets/gallery/big3-1800.webp 1800w"
+                sizes="(min-width: 701px) min(66vw, 790px), 100vw">
+              <img src="assets/gallery/big3-900.jpg"
+                srcset="assets/gallery/big3-900.jpg 900w, assets/gallery/big3-1800.jpg 1800w"
+                sizes="(min-width: 701px) min(66vw, 790px), 100vw" width="1800" height="1200" loading="lazy"
+                decoding="async" alt="Fisheye of a bowling wave breaking towards a white beach">
+            </picture>
+            <span class="gallery__cap">2026</span>
+          </a>
+
+          <a class="gallery__item gallery__item--tall reveal" href="assets/gallery/img4933-1800.jpg" data-caption="2026">
+            <picture>
+              <source type="image/webp"
+                srcset="assets/gallery/img4933-900.webp 900w, assets/gallery/img4933-1800.webp 1800w"
+                sizes="(min-width: 701px) min(70vw, 830px), 100vw">
+              <img src="assets/gallery/img4933-900.jpg"
+                srcset="assets/gallery/img4933-900.jpg 900w, assets/gallery/img4933-1800.jpg 1800w"
+                sizes="(min-width: 701px) min(70vw, 830px), 100vw" width="1800" height="1200" loading="lazy"
+                decoding="async" alt="Duck-diving under a wave, shot from below" style="object-position: 36% 50%">
+            </picture>
+            <span class="gallery__cap">2026</span>
+          </a>
+
+          <a class="gallery__item gallery__item--wide reveal" href="assets/gallery/big4-1800.jpg" data-caption="2026">
+            <picture>
+              <source type="image/webp"
+                srcset="assets/gallery/big4-900.webp 900w, assets/gallery/big4-1800.webp 1800w"
+                sizes="(min-width: 701px) min(66vw, 790px), 100vw">
+              <img src="assets/gallery/big4-900.jpg"
+                srcset="assets/gallery/big4-900.jpg 900w, assets/gallery/big4-1800.jpg 1800w"
+                sizes="(min-width: 701px) min(66vw, 790px), 100vw" width="1800" height="1200" loading="lazy"
+                decoding="async" alt="Dropping into a wave with dense jungle behind">
+            </picture>
+            <span class="gallery__cap">2026</span>
+          </a>
+
+          <a class="gallery__item gallery__item--wide reveal" href="assets/gallery/big5-1800.jpg" data-caption="2026">
+            <picture>
+              <source type="image/webp"
+                srcset="assets/gallery/big5-900.webp 900w, assets/gallery/big5-1800.webp 1800w"
+                sizes="(min-width: 701px) min(66vw, 790px), 100vw">
+              <img src="assets/gallery/big5-900.jpg"
+                srcset="assets/gallery/big5-900.jpg 900w, assets/gallery/big5-1800.jpg 1800w"
+                sizes="(min-width: 701px) min(66vw, 790px), 100vw" width="1800" height="1200" loading="lazy"
+                decoding="async" alt="Grinning mid-ride with whitewater exploding behind" style="object-position: 50% 30%">
+            </picture>
+            <span class="gallery__cap">2026</span>
+          </a>
+
+          <a class="gallery__item reveal" href="assets/gallery/swil5054-1800.jpg" data-caption="2026">
+            <picture>
+              <source type="image/webp"
+                srcset="assets/gallery/swil5054-900.webp 900w, assets/gallery/swil5054-1800.webp 1800w"
+                sizes="(min-width: 701px) min(33vw, 395px), 100vw">
+              <img src="assets/gallery/swil5054-900.jpg"
+                srcset="assets/gallery/swil5054-900.jpg 900w, assets/gallery/swil5054-1800.jpg 1800w"
+                sizes="(min-width: 701px) min(33vw, 395px), 100vw" width="1800" height="1200" loading="lazy"
+                decoding="async" alt="Crouched take-off at the top of a deep-blue wave">
+            </picture>
+            <span class="gallery__cap">2026</span>
+          </a>
+
+          <a class="gallery__item reveal" href="assets/gallery/img0175-1800.jpg" data-caption="2024">
+            <picture>
+              <source type="image/webp"
+                srcset="assets/gallery/img0175-900.webp 900w, assets/gallery/img0175-1800.webp 1800w"
+                sizes="(min-width: 701px) min(33vw, 395px), 100vw">
+              <img src="assets/gallery/img0175-900.jpg"
+                srcset="assets/gallery/img0175-900.jpg 900w, assets/gallery/img0175-1800.jpg 1800w"
+                sizes="(min-width: 701px) min(33vw, 395px), 100vw" width="1800" height="1200" loading="lazy"
+                decoding="async" alt="Trimming high on a glassy green wave">
+            </picture>
+            <span class="gallery__cap">2024</span>
+          </a>
+
+          <a class="gallery__item reveal" href="assets/gallery/img4961-1800.jpg" data-caption="2024">
+            <picture>
+              <source type="image/webp"
+                srcset="assets/gallery/img4961-900.webp 900w, assets/gallery/img4961-1800.webp 1800w"
+                sizes="(min-width: 701px) min(33vw, 395px), 100vw">
+              <img src="assets/gallery/img4961-900.jpg"
+                srcset="assets/gallery/img4961-900.jpg 900w, assets/gallery/img4961-1800.jpg 1800w"
+                sizes="(min-width: 701px) min(33vw, 395px), 100vw" width="1800" height="1200" loading="lazy"
+                decoding="async" alt="Tucked into a clean green wall">
+            </picture>
+            <span class="gallery__cap">2024</span>
+          </a>
+
+          <a class="gallery__item reveal" href="assets/gallery/swil3031-1800.jpg" data-caption="2026">
+            <picture>
+              <source type="image/webp"
+                srcset="assets/gallery/swil3031-900.webp 900w, assets/gallery/swil3031-1800.webp 1800w"
+                sizes="(min-width: 701px) min(33vw, 395px), 100vw">
+              <img src="assets/gallery/swil3031-900.jpg"
+                srcset="assets/gallery/swil3031-900.jpg 900w, assets/gallery/swil3031-1800.jpg 1800w"
+                sizes="(min-width: 701px) min(33vw, 395px), 100vw" width="1800" height="1200" loading="lazy"
+                decoding="async" alt="Fisheye of a clean right-hander in front of a palm-covered island" style="object-position: 30% 50%">
+            </picture>
+            <span class="gallery__cap">2026</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Work ===== -->
+    <section class="section work" id="work">
+      <div class="wrap">
+        <div class="section__head">
+          <p class="eyebrow reveal">Work</p>
+          <h2 class="reveal">Things I've <em>built.</em></h2>
+        </div>
+
+        <article class="feature reveal">
+          <div class="feature__text">
+            <p class="feature__tag">Featured &middot; Python, YOLO, InsightFace</p>
+            <h3>surf-sort</h3>
+            <p>After a boat trip you get handed a few thousand photos from the resort photographer, mixed across every
+              surfer on the boat. Nobody wants to scroll through all of them to find their own. surf-sort splits them by
+              person automatically.</p>
+            <p>YOLO finds the surfer in the frame, the crop goes through InsightFace for a face embedding, and
+              agglomerative clustering groups the embeddings by cosine distance. Anything ambiguous lands in a
+              manual-review folder instead of the wrong album.</p>
+            <a class="link" href="https://github.com/Jacklanch/surf-sort">View on GitHub &rarr;</a>
+          </div>
+          <ol class="pipe" aria-label="Pipeline">
+            <li><span class="pipe__n">01</span>
+              <div>
+                <div class="pipe__t">Detect</div>
+                <div class="pipe__d">YOLO11 finds people in the frame. Exactly one surfer, or the photo goes to review.
+                </div>
+              </div>
+            </li>
+            <li><span class="pipe__n">02</span>
+              <div>
+                <div class="pipe__t">Crop</div>
+                <div class="pipe__d">Tight crop to the rider so the face model isn't searching sky and whitewater.</div>
+              </div>
+            </li>
+            <li><span class="pipe__n">03</span>
+              <div>
+                <div class="pipe__t">Embed</div>
+                <div class="pipe__d">InsightFace <code>buffalo_l</code> turns the face into a normalised 512-d vector.
+                </div>
+              </div>
+            </li>
+            <li><span class="pipe__n">04</span>
+              <div>
+                <div class="pipe__t">Cluster</div>
+                <div class="pipe__d">Agglomerative clustering on cosine distance. No need to know how many surfers were
+                  on the boat.</div>
+              </div>
+            </li>
+            <li><span class="pipe__n">05</span>
+              <div>
+                <div class="pipe__t">Sort</div>
+                <div class="pipe__d">One folder per surfer. Small clusters and low-confidence frames land in
+                  <code>unsure/</code>.
+                </div>
+              </div>
+            </li>
+          </ol>
+        </article>
+
+        <div class="projects">
+          <a class="project reveal" href="https://github.com/Jacklanch/COMP9417-xRFM-project">
+            <span class="project__num">02</span>
+            <h3>xRFM investigation</h3>
+            <p>Group project for COMP9417 at UNSW. Trained recursive feature machines on five tabular datasets and
+              looked at how they scale and what the learned feature matrix says about the data.</p>
+            <span class="project__meta">Python &middot; Jupyter &middot; Machine learning</span>
+          </a>
+
+          <a class="project reveal" href="https://github.com/Jacklanch/Email-AI">
+            <span class="project__num">03</span>
+            <h3>Email agent</h3>
+            <p>Capstone group project. An assistant that triages a Gmail or Outlook inbox, drafts replies in your own
+              writing style, tracks subscriptions and schedules meetings. Python agent backend, Next.js chat frontend.
+            </p>
+            <span class="project__meta">LLM agents &middot; TypeScript &middot; Python</span>
+          </a>
+
+          <div class="project reveal">
+            <span class="project__num">04</span>
+            <h3>AFL/NFL Prediction Model?</h3>
+            <p>sample text sample text sample text sample text sample text sample text</p>
+            <span class="project__meta">Python &middot; ML &middot; Data</span>
+          </div>
+
+          <a class="project reveal" href="https://github.com/Jacklanch/Mandelbrot-Set-Generator">
+            <span class="project__num">05</span>
+            <h3>Something Security Related?</h3>
+            <p>sample text sample text sample text sample text sample text sample text</p>
+            <span class="project__meta">? &middot; ?</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Contact ===== -->
+    <section class="section contact" id="contact">
+      <div class="wrap contact__inner">
+        <p class="eyebrow reveal">Contact</p>
+        <h2 class="reveal">Say <em>hi.</em></h2>
+        <p class="section__sub reveal">Work, research, or where to catch a wave together. All welcome.</p>
+        <div class="contact__links reveal">
+          <button class="chip" id="emailBtn" type="button">Email <span>Click to copy</span></button>
+          <a class="chip" href="https://github.com/Jacklanch">GitHub <span>@Jacklanch</span></a>
+          <a class="chip" href="https://www.linkedin.com/in/jack-lanchester/">LinkedIn <span>jack-lanchester</span></a>
         </div>
       </div>
     </section>
 
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p>&copy; 2026</p>
-      <a href="#" class="back-to-top">Back to top &uarr;</a>
+  <footer class="footer">
+    <canvas id="ocean" aria-hidden="true"></canvas>
+    <div class="wrap footer__inner">
+      <p>&copy; 2026 Jack Lanchester</p>
+      <p>Hand-written HTML, CSS and JS. No frameworks, no trackers.</p>
+      <a href="#top">Back to top &uarr;</a>
     </div>
   </footer>
 
+  <dialog class="lightbox" id="lightbox" aria-label="Photo viewer">
+    <figure class="lightbox__fig">
+      <img class="lightbox__img" alt="">
+      <figcaption class="lightbox__cap"></figcaption>
+    </figure>
+    <button class="lightbox__btn lightbox__prev" type="button" aria-label="Previous photo">&larr;</button>
+    <button class="lightbox__btn lightbox__next" type="button" aria-label="Next photo">&rarr;</button>
+    <button class="lightbox__btn lightbox__close" type="button" aria-label="Close">&times;</button>
+  </dialog>
+
   <script src="script.js"></script>
 </body>
+
 </html>

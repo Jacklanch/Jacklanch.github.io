@@ -1,450 +1,209 @@
-const _e = 'amFja2xhbmNoZXN0ZXIyN0BnbWFpbC5jb20=';
-const emailCard = document.getElementById('emailCard');
-const emailValue = document.getElementById('emailValue');
+(() => {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-emailCard.addEventListener('click', (e) => {
-  e.preventDefault();
-  const decoded = atob(_e);
-  navigator.clipboard.writeText(decoded).then(() => {
-    emailValue.textContent = 'Copied!';
-    setTimeout(() => { emailValue.textContent = 'Click to copy'; }, 2000);
-  });
-});
+  // ----- Nav: glass on scroll, active section -----
+  const nav = document.getElementById('nav');
+  const navLinks = [...nav.querySelectorAll('.nav__links a')];
+  const sections = navLinks.map((a) => document.querySelector(a.getAttribute('href'))).filter(Boolean);
 
-// ===== Mobile nav toggle =====
-const navToggle = document.getElementById('navToggle');
-const navLinks = document.getElementById('navLinks');
+  const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 40);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 
-navToggle.addEventListener('click', () => {
-  navLinks.classList.toggle('open');
-});
-
-navLinks.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => {
-    navLinks.classList.remove('open');
-  });
-});
-
-// ===== Interactive Graph (Obsidian-style) =====
-(function () {
-  const canvas = document.getElementById('graphCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-
-  // --- Config ---
-  const NODE_COUNT = 120;
-  const EDGE_PROBABILITY = 0.025;
-  const NODE_RADIUS = 3;
-  // Color per cluster (10 clusters): 3 yellow, 2 red, 3 green, 2 blue
-  const CLUSTER_COLORS = [
-    { color: 'rgba(255, 230, 0, 0.6)',  bright: 'rgba(255, 230, 0, 0.9)'  },  // yellow
-    { color: 'rgba(255, 230, 0, 0.6)',  bright: 'rgba(255, 230, 0, 0.9)'  },  // yellow
-    { color: 'rgba(255, 230, 0, 0.6)',  bright: 'rgba(255, 230, 0, 0.9)'  },  // yellow
-    { color: 'rgba(239, 68, 68, 0.6)',  bright: 'rgba(239, 68, 68, 0.9)'  },  // red
-    { color: 'rgba(239, 68, 68, 0.6)',  bright: 'rgba(239, 68, 68, 0.9)'  },  // red
-    { color: 'rgba(34, 197, 94, 0.6)',  bright: 'rgba(34, 197, 94, 0.9)'  },  // green
-    { color: 'rgba(34, 197, 94, 0.6)',  bright: 'rgba(34, 197, 94, 0.9)'  },  // green
-    { color: 'rgba(34, 197, 94, 0.6)',  bright: 'rgba(34, 197, 94, 0.9)'  },  // green
-    { color: 'rgba(129, 140, 248, 0.6)', bright: 'rgba(129, 140, 248, 0.9)' },  // blue
-    { color: 'rgba(129, 140, 248, 0.6)', bright: 'rgba(129, 140, 248, 0.9)' },  // blue
-  ];
-  const EDGE_COLOR = 'rgba(129, 140, 248, 0.15)';
-  const EDGE_COLOR_HOVER = 'rgba(129, 140, 248, 0.35)';
-  const CENTER_REPULSION_RADIUS = 180;
-  const CENTER_REPULSION_STRENGTH = 2.5;
-  const INTRA_LINK_DISTANCE = 50;       // short springs within clusters
-  const INTRA_ATTRACTION = 0.008;
-  const INTER_LINK_DISTANCE = 250;      // long loose springs between clusters
-  const INTER_ATTRACTION = 0.0005;
-  const REPULSION_STRENGTH = 400;
-  const DAMPING = 0.92;
-  const GRAVITY = 0.0008;
-
-  let width, height, centerX, centerY;
-  let nodes = [];
-  let edges = [];
-  let dragNode = null;
-  let hoveredNode = null;
-  let mouse = { x: 0, y: 0 };
-  let animId;
-
-  function resize() {
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.parentElement.getBoundingClientRect();
-    width = rect.width;
-    height = rect.height;
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    canvas.style.width = width + 'px';
-    canvas.style.height = height + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    centerX = width / 2;
-    centerY = height / 2;
-  }
-
-  function initGraph() {
-    nodes = [];
-    edges = [];
-
-    // --- Cluster layout ---
-    // 8-12 clusters, each with a handful of tightly-connected nodes
-    const CLUSTER_COUNT = 10;
-    const nodesPerCluster = Math.floor(NODE_COUNT / CLUSTER_COUNT);
-    const remainder = NODE_COUNT - nodesPerCluster * CLUSTER_COUNT;
-
-    // Pick cluster center positions spread around the canvas (avoid dead center)
-    const clusterCenters = [];
-    const margin = 120;
-    const angleStep = (Math.PI * 2) / CLUSTER_COUNT;
-    for (let c = 0; c < CLUSTER_COUNT; c++) {
-      const angle = angleStep * c + (Math.random() - 0.5) * 0.6;
-      const minR = CENTER_REPULSION_RADIUS + 60;
-      const maxR = Math.min(width, height) * 0.38;
-      const r = minR + Math.random() * (maxR - minR);
-      clusterCenters.push({
-        x: centerX + Math.cos(angle) * r,
-        y: centerY + Math.sin(angle) * r
+  const activeObs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        navLinks.forEach((a) => a.classList.toggle('is-active', a.getAttribute('href') === `#${e.target.id}`));
       });
-    }
+    },
+    { rootMargin: '-45% 0px -50% 0px' },
+  );
+  sections.forEach((s) => activeObs.observe(s));
 
-    // Shuffle cluster color order so same colors aren't always adjacent
-    const shuffledColors = [...CLUSTER_COLORS];
-    for (let i = shuffledColors.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledColors[i], shuffledColors[j]] = [shuffledColors[j], shuffledColors[i]];
-    }
-
-    // Create nodes, grouped by cluster
-    let nodeIndex = 0;
-    const clusterRanges = []; // [startIdx, endIdx) per cluster
-    for (let c = 0; c < CLUSTER_COUNT; c++) {
-      const count = nodesPerCluster + (c < remainder ? 1 : 0);
-      const start = nodeIndex;
-      const spread = 60 + Math.random() * 40;
-      const clusterColor = shuffledColors[c];
-
-      for (let n = 0; n < count; n++) {
-        const angle = Math.random() * Math.PI * 2;
-        const r = Math.random() * spread;
-        const x = clusterCenters[c].x + Math.cos(angle) * r;
-        const y = clusterCenters[c].y + Math.sin(angle) * r;
-
-        nodes.push({
-          x, y,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-          radius: NODE_RADIUS + Math.random() * 2,
-          pinned: false,
-          cluster: c,
-          color: clusterColor.color,
-          bright: clusterColor.bright
-        });
-        nodeIndex++;
-      }
-      clusterRanges.push({ start, end: nodeIndex });
-    }
-
-    // --- Intra-cluster edges (dense) ---
-    // Connect each node to 2-4 nearby nodes within its cluster
-    for (let c = 0; c < CLUSTER_COUNT; c++) {
-      const { start, end } = clusterRanges[c];
-      const clusterSize = end - start;
-
-      // First build a spanning chain so the cluster is connected
-      for (let i = start; i < end - 1; i++) {
-        edges.push({ a: i, b: i + 1, intra: true });
-      }
-
-      // Then add extra intra-cluster edges for density
-      for (let i = start; i < end; i++) {
-        const extras = 1 + Math.floor(Math.random() * 2);
-        for (let e = 0; e < extras; e++) {
-          const j = start + Math.floor(Math.random() * clusterSize);
-          if (j !== i && !edges.some(edge =>
-            (edge.a === Math.min(i, j) && edge.b === Math.max(i, j))
-          )) {
-            edges.push({ a: Math.min(i, j), b: Math.max(i, j), intra: true });
-          }
-        }
-      }
-    }
-
-    // --- Inter-cluster bridges (sparse) ---
-    // 1-2 connections between neighboring clusters
-    for (let c = 0; c < CLUSTER_COUNT; c++) {
-      const bridgeCount = 1 + Math.floor(Math.random() * 2);
-      for (let b = 0; b < bridgeCount; b++) {
-        const target = (c + 1 + Math.floor(Math.random() * 3)) % CLUSTER_COUNT;
-        const { start: s1, end: e1 } = clusterRanges[c];
-        const { start: s2, end: e2 } = clusterRanges[target];
-        const i = s1 + Math.floor(Math.random() * (e1 - s1));
-        const j = s2 + Math.floor(Math.random() * (e2 - s2));
-        edges.push({ a: Math.min(i, j), b: Math.max(i, j), intra: false });
-      }
-    }
-  }
-
-  function simulate() {
-    // Node-node repulsion
-    for (let i = 0; i < nodes.length; i++) {
-      for (let j = i + 1; j < nodes.length; j++) {
-        const dx = nodes[j].x - nodes[i].x;
-        const dy = nodes[j].y - nodes[i].y;
-        const dist = Math.max(Math.hypot(dx, dy), 1);
-        const force = REPULSION_STRENGTH / (dist * dist);
-        const fx = (dx / dist) * force;
-        const fy = (dy / dist) * force;
-        if (!nodes[i].pinned) { nodes[i].vx -= fx; nodes[i].vy -= fy; }
-        if (!nodes[j].pinned) { nodes[j].vx += fx; nodes[j].vy += fy; }
-      }
-    }
-
-    // Edge attraction (spring) — different strength for intra vs inter cluster
-    for (const edge of edges) {
-      const a = nodes[edge.a];
-      const b = nodes[edge.b];
-      const linkDist = edge.intra ? INTRA_LINK_DISTANCE : INTER_LINK_DISTANCE;
-      const strength = edge.intra ? INTRA_ATTRACTION : INTER_ATTRACTION;
-      const dx = b.x - a.x;
-      const dy = b.y - a.y;
-      const dist = Math.max(Math.hypot(dx, dy), 1);
-      const displacement = dist - linkDist;
-      const force = displacement * strength;
-      const fx = (dx / dist) * force;
-      const fy = (dy / dist) * force;
-      if (!a.pinned) { a.vx += fx; a.vy += fy; }
-      if (!b.pinned) { b.vx -= fx; b.vy -= fy; }
-    }
-
-    // Center repulsion (clear the middle for the title)
-    for (const node of nodes) {
-      if (node.pinned) continue;
-      const dx = node.x - centerX;
-      const dy = node.y - centerY;
-      const dist = Math.max(Math.hypot(dx, dy), 1);
-      if (dist < CENTER_REPULSION_RADIUS) {
-        const force = CENTER_REPULSION_STRENGTH * (1 - dist / CENTER_REPULSION_RADIUS);
-        node.vx += (dx / dist) * force;
-        node.vy += (dy / dist) * force;
-      }
-    }
-
-    // Gravity toward center (keeps graph from drifting off-screen)
-    for (const node of nodes) {
-      if (node.pinned) continue;
-      node.vx += (centerX - node.x) * GRAVITY;
-      node.vy += (centerY - node.y) * GRAVITY;
-    }
-
-    // Integrate velocity
-    for (const node of nodes) {
-      if (node.pinned) continue;
-      node.vx *= DAMPING;
-      node.vy *= DAMPING;
-      node.x += node.vx;
-      node.y += node.vy;
-
-      // Soft boundary
-      const margin = 20;
-      if (node.x < margin) { node.x = margin; node.vx *= -0.5; }
-      if (node.x > width - margin) { node.x = width - margin; node.vx *= -0.5; }
-      if (node.y < margin) { node.y = margin; node.vy *= -0.5; }
-      if (node.y > height - margin) { node.y = height - margin; node.vy *= -0.5; }
-    }
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, width, height);
-
-    // Find hovered node's connected nodes
-    const connectedToHover = new Set();
-    if (hoveredNode !== null) {
-      connectedToHover.add(hoveredNode);
-      for (const edge of edges) {
-        if (edge.a === hoveredNode) connectedToHover.add(edge.b);
-        if (edge.b === hoveredNode) connectedToHover.add(edge.a);
-      }
-    }
-
-    // Draw edges
-    for (const edge of edges) {
-      const a = nodes[edge.a];
-      const b = nodes[edge.b];
-      const isHighlighted = hoveredNode !== null &&
-        (edge.a === hoveredNode || edge.b === hoveredNode);
-
-      ctx.beginPath();
-      ctx.moveTo(a.x, a.y);
-      ctx.lineTo(b.x, b.y);
-      ctx.strokeStyle = isHighlighted ? EDGE_COLOR_HOVER : EDGE_COLOR;
-      ctx.lineWidth = isHighlighted ? 1.5 : 0.5;
-      ctx.stroke();
-    }
-
-    // Draw nodes
-    for (let i = 0; i < nodes.length; i++) {
-      const node = nodes[i];
-      const isConnected = connectedToHover.has(i);
-      const isHovered = i === hoveredNode;
-
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, isHovered ? node.radius + 2 : node.radius, 0, Math.PI * 2);
-      ctx.fillStyle = isConnected ? node.bright : node.color;
-      ctx.fill();
-
-      // Glow on hovered node
-      if (isHovered) {
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, node.radius + 8, 0, Math.PI * 2);
-        ctx.fillStyle = node.bright.replace(/[\d.]+\)$/, '0.15)');
-        ctx.fill();
-      }
-    }
-  }
-
-  function loop() {
-    simulate();
-    draw();
-    animId = requestAnimationFrame(loop);
-  }
-
-  // --- Mouse interaction ---
-  function getNodeAt(x, y) {
-    for (let i = nodes.length - 1; i >= 0; i--) {
-      const d = Math.hypot(x - nodes[i].x, y - nodes[i].y);
-      if (d < nodes[i].radius + 10) return i;
-    }
-    return null;
-  }
-
-  function getMousePos(e) {
-    const rect = canvas.getBoundingClientRect();
-    return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
+  // ----- Hero parallax -----
+  const heroMedia = document.querySelector('.hero__media');
+  if (heroMedia && !reduceMotion) {
+    let ticking = false;
+    const update = () => {
+      const y = window.scrollY;
+      if (y < window.innerHeight * 1.2) heroMedia.style.transform = `translateY(${y * 0.28}px)`;
+      ticking = false;
     };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (ticking) return;
+        requestAnimationFrame(update);
+        ticking = true;
+      },
+      { passive: true },
+    );
   }
 
-  canvas.addEventListener('mousemove', (e) => {
-    const pos = getMousePos(e);
-    mouse = pos;
-
-    if (dragNode !== null) {
-      nodes[dragNode].x = pos.x;
-      nodes[dragNode].y = pos.y;
-      nodes[dragNode].vx = 0;
-      nodes[dragNode].vy = 0;
-    }
-
-    hoveredNode = getNodeAt(pos.x, pos.y);
-    canvas.style.cursor = hoveredNode !== null ? 'grab' : 'default';
+  // ----- Reveal on scroll, staggered among siblings -----
+  const revealEls = document.querySelectorAll('.reveal');
+  const counts = new Map();
+  revealEls.forEach((el) => {
+    const i = counts.get(el.parentElement) ?? 0;
+    el.style.setProperty('--d', `${Math.min(i, 6) * 90}ms`);
+    counts.set(el.parentElement, i + 1);
   });
+  const revealObs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        revealObs.unobserve(e.target);
+      });
+    },
+    { threshold: 0.12, rootMargin: '0px 0px -8% 0px' },
+  );
+  revealEls.forEach((el) => revealObs.observe(el));
 
-  canvas.addEventListener('mousedown', (e) => {
-    const pos = getMousePos(e);
-    const idx = getNodeAt(pos.x, pos.y);
-    if (idx !== null) {
-      dragNode = idx;
-      nodes[idx].pinned = true;
-      canvas.style.cursor = 'grabbing';
-    }
-  });
+  // ----- Gallery lightbox -----
+  const gallery = document.getElementById('gallery');
+  const lightbox = document.getElementById('lightbox');
+  if (gallery && lightbox) {
+    const items = [...gallery.querySelectorAll('.gallery__item')];
+    const img = lightbox.querySelector('.lightbox__img');
+    const cap = lightbox.querySelector('.lightbox__cap');
+    let index = 0;
 
-  canvas.addEventListener('mouseup', () => {
-    if (dragNode !== null) {
-      nodes[dragNode].pinned = false;
-      canvas.style.cursor = hoveredNode !== null ? 'grab' : 'default';
-    }
-    dragNode = null;
-  });
+    const wrap = (i) => (i + items.length) % items.length;
+    const preload = (i) => {
+      new Image().src = items[wrap(i)].href;
+    };
+    const show = (i) => {
+      index = wrap(i);
+      const item = items[index];
+      img.src = item.href;
+      img.alt = item.querySelector('img').alt;
+      cap.textContent = item.dataset.caption;
+      preload(index + 1);
+      preload(index - 1);
+    };
 
-  canvas.addEventListener('mouseleave', () => {
-    if (dragNode !== null) {
-      nodes[dragNode].pinned = false;
-    }
-    dragNode = null;
-    hoveredNode = null;
-  });
+    items.forEach((item, i) => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        show(i);
+        lightbox.showModal();
+      });
+    });
+    lightbox.querySelector('.lightbox__prev').addEventListener('click', () => show(index - 1));
+    lightbox.querySelector('.lightbox__next').addEventListener('click', () => show(index + 1));
+    lightbox.querySelector('.lightbox__close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) lightbox.close();
+    });
+    lightbox.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') show(index + 1);
+      if (e.key === 'ArrowLeft') show(index - 1);
+    });
 
-  // Touch support
-  canvas.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    const pos = getMousePos(touch);
-    const idx = getNodeAt(pos.x, pos.y);
-    if (idx !== null) {
-      dragNode = idx;
-      nodes[idx].pinned = true;
-    }
-  }, { passive: false });
+    let touchX = 0;
+    lightbox.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+    lightbox.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 50) show(index + (dx < 0 ? 1 : -1));
+    });
+  }
 
-  canvas.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    if (dragNode !== null) {
-      const touch = e.touches[0];
-      const pos = getMousePos(touch);
-      nodes[dragNode].x = pos.x;
-      nodes[dragNode].y = pos.y;
-      nodes[dragNode].vx = 0;
-      nodes[dragNode].vy = 0;
-    }
-  }, { passive: false });
-
-  canvas.addEventListener('touchend', () => {
-    if (dragNode !== null) {
-      nodes[dragNode].pinned = false;
-    }
-    dragNode = null;
-  });
-
-  // --- Init ---
-  resize();
-  initGraph();
-  loop();
-
-  window.addEventListener('resize', () => {
-    resize();
-    // Re-center the repulsion zone
-    centerX = width / 2;
-    centerY = height / 2;
-  });
-})();
-
-// ===== Scroll-triggered fade-in animations =====
-const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -40px 0px' };
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
-  });
-}, observerOptions);
-
-document.querySelectorAll('.section, .project-card, .detail-card, .skill-category, .contact-card').forEach(el => {
-  el.classList.add('fade-in');
-  observer.observe(el);
-});
-
-// ===== Active nav link highlighting on scroll =====
-const sections = document.querySelectorAll('.section[id]');
-
-window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY + 100;
-  sections.forEach(section => {
-    const top = section.offsetTop;
-    const height = section.offsetHeight;
-    const id = section.getAttribute('id');
-    const link = document.querySelector(`.nav-links a[href="#${id}"]`);
-    if (link) {
-      if (scrollY >= top && scrollY < top + height) {
-        link.style.color = 'var(--accent-light)';
-        link.style.background = 'var(--surface)';
-      } else {
-        link.style.color = '';
-        link.style.background = '';
+  // ----- Email: decoded on click so the address isn't sitting in the markup -----
+  const emailBtn = document.getElementById('emailBtn');
+  if (emailBtn) {
+    const value = emailBtn.querySelector('span');
+    const address = atob('amFja2xhbmNoZXN0ZXIyN0BnbWFpbC5jb20=');
+    emailBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(address);
+      } catch {
+        window.location.href = `mailto:${address}`;
+        return;
       }
-    }
-  });
-});
+      value.textContent = 'Copied';
+      emailBtn.classList.add('is-copied');
+      setTimeout(() => {
+        value.textContent = 'Click to copy';
+        emailBtn.classList.remove('is-copied');
+      }, 2200);
+    });
+  }
+
+  // ----- Footer ocean: layered sine waves that swell under the cursor -----
+  const canvas = document.getElementById('ocean');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    const waves = [
+      { amp: 14, len: 0.011, speed: 0.9, base: 0.56, color: 'rgba(94, 224, 208, 0.07)' },
+      { amp: 20, len: 0.0075, speed: 0.55, base: 0.64, color: 'rgba(94, 224, 208, 0.1)' },
+      { amp: 26, len: 0.0052, speed: 0.32, base: 0.74, color: 'rgba(16, 52, 76, 0.9)' },
+      { amp: 18, len: 0.004, speed: 0.2, base: 0.86, color: 'rgba(7, 19, 31, 1)' },
+    ];
+    let w = 0;
+    let h = 0;
+    let t = 0;
+    let mx = 0.5;
+    let my = 0.5;
+    let targetX = 0.5;
+    let targetY = 0.5;
+    let raf = 0;
+    let visible = false;
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = canvas.getBoundingClientRect();
+      w = rect.width;
+      h = rect.height;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      mx += (targetX - mx) * 0.04;
+      my += (targetY - my) * 0.04;
+      const ampMul = 0.7 + (1 - my) * 0.8;
+      waves.forEach((wv, i) => {
+        ctx.beginPath();
+        ctx.moveTo(0, h);
+        for (let x = 0; x <= w + 8; x += 8) {
+          const swell = 1 + 0.7 * Math.exp(-((x / w - mx) ** 2) / 0.02);
+          const y = h * wv.base + Math.sin(x * wv.len + t * wv.speed + i * 1.7) * wv.amp * ampMul * swell;
+          ctx.lineTo(x, y);
+        }
+        ctx.lineTo(w, h);
+        ctx.closePath();
+        ctx.fillStyle = wv.color;
+        ctx.fill();
+      });
+      t += 0.016;
+    };
+
+    const loop = () => {
+      draw();
+      if (visible && !reduceMotion) raf = requestAnimationFrame(loop);
+    };
+
+    new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      cancelAnimationFrame(raf);
+      if (visible) loop();
+    }).observe(canvas);
+
+    window.addEventListener('resize', () => {
+      resize();
+      draw();
+    });
+    canvas.parentElement.addEventListener('pointermove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      targetX = (e.clientX - rect.left) / rect.width;
+      targetY = (e.clientY - rect.top) / rect.height;
+    });
+
+    resize();
+    draw();
+  }
+})();
